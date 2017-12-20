@@ -15,6 +15,10 @@
 #include <QBuffer>
 #include <QMenu>
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 4, 0)
+    typedef QList<QByteArray> QByteArrayList;
+#endif
+
 QList<QByteArrayList> ExtendedTableWidget::m_buffer;
 
 namespace
@@ -583,14 +587,14 @@ void ExtendedTableWidget::dragMoveEvent(QDragMoveEvent* event)
 void ExtendedTableWidget::dropEvent(QDropEvent* event)
 {
     QModelIndex index = indexAt(event->pos());
-    
+
     if (!index.isValid())
     {
         if (event->mimeData()->hasUrls() && event->mimeData()->urls().first().isLocalFile())
             emit openFileFromDropEvent(event->mimeData()->urls().first().toLocalFile());
         return;
     }
-    
+
     model()->dropMimeData(event->mimeData(), Qt::CopyAction, index.row(), index.column(), QModelIndex());
     event->acceptProposedAction();
 }

@@ -47,7 +47,9 @@
 #include <QClipboard>
 #include <QShortcut>
 #include <QTextCodec>
-#include <QOpenGLWidget>
+#ifdef Q_OS_MACX
+	#include <QOpenGLWidget>
+#endif
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent),
