@@ -245,7 +245,7 @@ QVariant Settings::getDefaultValue(const QString& group, const QString& name)
     // editor/fontsize or log/fontsize?
     if((group == "editor" || group == "log") && name == "fontsize")
 #ifdef Q_OS_MAC
-    // Use 12 pt size as the default on OSX
+       // Use 12 pt size as the default on OSX
         return 12;
 #else
         return 9;

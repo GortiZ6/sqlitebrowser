@@ -184,7 +184,7 @@ void EditTableDialog::accept()
 }
 
 void EditTableDialog::reject()
-{
+{    
     // Then rollback to our savepoint
     pdb.revertToSavepoint(m_sRestorePointName);
 
