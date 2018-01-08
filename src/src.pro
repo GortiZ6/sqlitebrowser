@@ -67,7 +67,8 @@ HEADERS += \
     jsontextedit.h \
     FindReplaceDialog.h \
     ExtendedScintilla.h \
-    FileExtensionManager.h
+    FileExtensionManager.h \
+    Data.h
 
 SOURCES += \
     sqlitedb.cpp \
@@ -107,7 +108,8 @@ SOURCES += \
     jsontextedit.cpp \
     FindReplaceDialog.cpp \
     ExtendedScintilla.cpp \
-    FileExtensionManager.cpp
+    FileExtensionManager.cpp \
+    Data.cpp
 
 RESOURCES += icons/icons.qrc \
              translations/flags/flags.qrc \
