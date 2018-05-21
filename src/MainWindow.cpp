@@ -2022,11 +2022,19 @@ void MainWindow::on_actionWiki_triggered()
 void MainWindow::on_actionBug_report_triggered()
 {
     const QString version = Application::versionString();
+#if QT_VERSION >= QT_VERSION_CHECK(5,4,0)
     const QString os = QSysInfo::prettyProductName();
     const QString kernelType = QSysInfo::kernelType();
     const QString kernelVersion = QSysInfo::kernelVersion();
     const QString arch = QSysInfo::currentCpuArchitecture();
     const QString body = QString("\n\n\n\n\n\n\n\n> DB4S v%1 on %2 (%3/%4) [%5]").arg(version, os, kernelType, kernelVersion, arch);
+#else
+    #ifndef __linux__
+        #error "On OS different from Linux only Qt > 5.4.0 is supported"
+    #else
+        const QString body = QString("\n\n\n\n\n\n\n\n> DB4S v%1 on Linux with Qt < 5.4").arg(version);
+    #endif
+#endif
 
     QUrlQuery query;
     query.addQueryItem("labels", "bug");

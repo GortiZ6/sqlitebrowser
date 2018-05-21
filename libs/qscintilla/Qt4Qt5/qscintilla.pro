@@ -26,29 +26,21 @@ TEMPLATE = lib
 TARGET = qscintilla2
 CONFIG += qt warn_off thread exceptions hide_symbols staticlib debug_and_release
 INCLUDEPATH += . ../include ../lexlib ../src
-
-contains(QT_VERSION, ^4\\..*\\..*) {
-        QMAKE_CXXFLAGS += -std=c++0x
-}
-contains(QT_VERSION, ^5\\..*\\..*) {
-        QMAKE_CXXFLAGS += -std=c++11
-}
+QMAKE_CXXFLAGS += -std=c++11
 
 !CONFIG(staticlib) {
     DEFINES += QSCINTILLA_MAKE_DLL
 }
 DEFINES += SCINTILLA_QT SCI_LEXER
 
-greaterThan(QT_MAJOR_VERSION, 4) {
-	QT += widgets printsupport
+QT += widgets printsupport
 
-    greaterThan(QT_MINOR_VERSION, 1) {
-	    macx:QT += macextras
-    }
-
-    # Work around QTBUG-39300.
-    CONFIG -= android_install
+greaterThan(QT_MINOR_VERSION, 1) {
+    macx:QT += macextras
 }
+
+# Work around QTBUG-39300.
+CONFIG -= android_install
 
 # Comment this in if you want the internal Scintilla classes to be placed in a
 # Scintilla namespace rather than pollute the global namespace.
