@@ -10,19 +10,26 @@ FilterTableHeader::FilterTableHeader(QTableView* parent) :
 {
     // Activate the click signals to allow sorting
     setSectionsClickable(true);
+
     // But use our own indicators allowing multi-column sorting
     setSortIndicatorShown(false);
 
+    // Make sure to not automatically resize the columns according to the contents
+    setSectionResizeMode(QHeaderView::Interactive);
+
+    // Highlight column headers of selected cells to emulate spreadsheet behaviour
+    setHighlightSections(true);
+
     // Do some connects: Basically just resize and reposition the input widgets whenever anything changes
-    connect(this, SIGNAL(sectionResized(int,int,int)), this, SLOT(adjustPositions()));
-    connect(parent->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(adjustPositions()));
-    connect(parent->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(adjustPositions()));
+    connect(this, &FilterTableHeader::sectionResized, this, &FilterTableHeader::adjustPositions);
+    connect(parent->horizontalScrollBar(), &QScrollBar::valueChanged, this, &FilterTableHeader::adjustPositions);
+    connect(parent->verticalScrollBar(), &QScrollBar::valueChanged, this, &FilterTableHeader::adjustPositions);
 
     // Set custom context menu handling
     setContextMenuPolicy(Qt::CustomContextMenu);
 }
 
-void FilterTableHeader::generateFilters(size_t number, bool showFirst)
+void FilterTableHeader::generateFilters(size_t number, size_t number_of_hidden_filters)
 {
     // Delete all the current filter widgets
     qDeleteAll(filterWidgets);
@@ -32,19 +39,16 @@ void FilterTableHeader::generateFilters(size_t number, bool showFirst)
     for(size_t i=0;i < number; ++i)
     {
         FilterLineEdit* l = new FilterLineEdit(this, &filterWidgets, i);
-        if(!showFirst && i == 0)        // This hides the first input widget which belongs to the hidden rowid column
-            l->setVisible(false);
-        else
-            l->setVisible(true);
-        connect(l, SIGNAL(delayedTextChanged(QString)), this, SLOT(inputChanged(QString)));
-        connect(l, SIGNAL(addFilterAsCondFormat(QString)), this, SLOT(addFilterAsCondFormat(QString)));
-        connect(l, SIGNAL(clearAllCondFormats()), this, SLOT(clearAllCondFormats()));
-        connect(l, SIGNAL(editCondFormats()), this, SLOT(editCondFormats()));
+        l->setVisible(i >= number_of_hidden_filters);
+        connect(l, &FilterLineEdit::delayedTextChanged, this, &FilterTableHeader::inputChanged);
+        connect(l, &FilterLineEdit::addFilterAsCondFormat, this, &FilterTableHeader::addFilterAsCondFormat);
+        connect(l, &FilterLineEdit::clearAllCondFormats, this, &FilterTableHeader::clearAllCondFormats);
+        connect(l, &FilterLineEdit::editCondFormats, this, &FilterTableHeader::editCondFormats);
         filterWidgets.push_back(l);
     }
 
     // Position them correctly
-    adjustPositions();
+    updateGeometries();
 }
 
 QSize FilterTableHeader::sizeHint() const
@@ -89,25 +93,25 @@ void FilterTableHeader::adjustPositions()
 void FilterTableHeader::inputChanged(const QString& new_value)
 {
     // Just get the column number and the new value and send them to anybody interested in filter changes
-    emit filterChanged(sender()->property("column").toInt(), new_value);
+    emit filterChanged(sender()->property("column").toUInt(), new_value);
 }
 
 void FilterTableHeader::addFilterAsCondFormat(const QString& filter)
 {
     // Just get the column number and the new value and send them to anybody interested in new conditional formatting
-    emit addCondFormat(sender()->property("column").toInt(), filter);
+    emit addCondFormat(sender()->property("column").toUInt(), filter);
 }
 
 void FilterTableHeader::clearAllCondFormats()
 {
     // Just get the column number and send it to anybody responsible or interested in clearing conditional formatting
-    emit clearAllCondFormats(sender()->property("column").toInt());
+    emit allCondFormatsCleared(sender()->property("column").toUInt());
 }
 
 void FilterTableHeader::editCondFormats()
 {
     // Just get the column number and the new value and send them to anybody interested in editting conditional formatting
-    emit editCondFormats(sender()->property("column").toInt());
+    emit condFormatsEdited(sender()->property("column").toUInt());
 }
 
 void FilterTableHeader::clearFilters()
@@ -120,4 +124,9 @@ void FilterTableHeader::setFilter(size_t column, const QString& value)
 {
     if(column < filterWidgets.size())
         filterWidgets.at(column)->setText(value);
+}
+
+QString FilterTableHeader::filterValue(size_t column) const
+{
+    return filterWidgets[column]->text();
 }

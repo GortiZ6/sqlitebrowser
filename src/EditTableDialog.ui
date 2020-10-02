@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>650</width>
+    <width>800</width>
     <height>600</height>
    </rect>
   </property>
@@ -111,7 +111,7 @@
           <item>
            <widget class="QToolButton" name="addFieldButton">
             <property name="text">
-             <string>Add field</string>
+             <string>Add</string>
             </property>
             <property name="icon">
              <iconset resource="icons/icons.qrc">
@@ -131,7 +131,7 @@
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>Remove field</string>
+             <string>Remove</string>
             </property>
             <property name="icon">
              <iconset resource="icons/icons.qrc">
@@ -146,12 +146,35 @@
            </widget>
           </item>
           <item>
+           <widget class="QToolButton" name="buttonMoveTop">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Move to top</string>
+            </property>
+            <property name="icon">
+             <iconset resource="icons/icons.qrc">
+              <normaloff>:/icons/arrow_top</normaloff>:/icons/arrow_top</iconset>
+            </property>
+            <property name="toolButtonStyle">
+             <enum>Qt::ToolButtonTextBesideIcon</enum>
+            </property>
+            <property name="autoRaise">
+             <bool>true</bool>
+            </property>
+            <property name="arrowType">
+             <enum>Qt::NoArrow</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QToolButton" name="buttonMoveUp">
             <property name="enabled">
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>Move field up</string>
+             <string>Move up</string>
             </property>
             <property name="icon">
              <iconset resource="icons/icons.qrc">
@@ -171,11 +194,31 @@
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>Move field down</string>
+             <string>Move down</string>
             </property>
             <property name="icon">
              <iconset resource="icons/icons.qrc">
               <normaloff>:/icons/down</normaloff>:/icons/down</iconset>
+            </property>
+            <property name="toolButtonStyle">
+             <enum>Qt::ToolButtonTextBesideIcon</enum>
+            </property>
+            <property name="autoRaise">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="buttonMoveBottom">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Move to bottom</string>
+            </property>
+            <property name="icon">
+             <iconset resource="icons/icons.qrc">
+              <normaloff>:/icons/arrow_bottom</normaloff>:/icons/arrow_bottom</iconset>
             </property>
             <property name="toolButtonStyle">
              <enum>Qt::ToolButtonTextBesideIcon</enum>
@@ -214,6 +257,15 @@
             <height>140</height>
            </size>
           </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+          </property>
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectItems</enum>
+          </property>
           <property name="rootIsDecorated">
            <bool>false</bool>
           </property>
@@ -240,7 +292,7 @@
             <string>PK</string>
            </property>
            <property name="toolTip">
-            <string>Primary key</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/icons/field_key&quot;/&gt; Primary key&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
           </column>
           <column>
@@ -277,7 +329,15 @@
           </column>
           <column>
            <property name="text">
+            <string>Collation</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
             <string>Foreign Key</string>
+           </property>
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/icons/field_fk&quot;/&gt; Foreign Key&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
           </column>
          </widget>
@@ -299,6 +359,9 @@
             <property name="icon">
              <iconset resource="icons/icons.qrc">
               <normaloff>:/icons/field_add</normaloff>:/icons/field_add</iconset>
+            </property>
+            <property name="popupMode">
+             <enum>QToolButton::InstantPopup</enum>
             </property>
             <property name="toolButtonStyle">
              <enum>Qt::ToolButtonTextBesideIcon</enum>
@@ -345,6 +408,9 @@
         </item>
         <item>
          <widget class="QTableWidget" name="tableConstraints">
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
           <property name="horizontalScrollMode">
            <enum>QAbstractItemView::ScrollPerPixel</enum>
           </property>
@@ -401,6 +467,46 @@
     </widget>
    </item>
   </layout>
+  <action name="actionAddPrimaryKey">
+   <property name="icon">
+    <iconset resource="icons/icons.qrc">
+     <normaloff>:/icons/field_key</normaloff>:/icons/field_key</iconset>
+   </property>
+   <property name="text">
+    <string>Primary Key</string>
+   </property>
+   <property name="toolTip">
+    <string>Add a primary key constraint</string>
+   </property>
+  </action>
+  <action name="actionAddForeignKey">
+   <property name="icon">
+    <iconset resource="icons/icons.qrc">
+     <normaloff>:/icons/field_fk</normaloff>:/icons/field_fk</iconset>
+   </property>
+   <property name="text">
+    <string>Foreign Key</string>
+   </property>
+   <property name="toolTip">
+    <string>Add a foreign key constraint</string>
+   </property>
+  </action>
+  <action name="actionAddUniqueConstraint">
+   <property name="text">
+    <string>Unique</string>
+   </property>
+   <property name="toolTip">
+    <string>Add a unique constraint</string>
+   </property>
+  </action>
+  <action name="actionAddCheckConstraint">
+   <property name="text">
+    <string>Check</string>
+   </property>
+   <property name="toolTip">
+    <string>Add a check constraint</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -415,12 +521,18 @@
   <tabstop>buttonMore</tabstop>
   <tabstop>comboSchema</tabstop>
   <tabstop>checkWithoutRowid</tabstop>
+  <tabstop>groupDefinition</tabstop>
   <tabstop>addFieldButton</tabstop>
   <tabstop>removeFieldButton</tabstop>
+  <tabstop>buttonMoveTop</tabstop>
   <tabstop>buttonMoveUp</tabstop>
   <tabstop>buttonMoveDown</tabstop>
+  <tabstop>buttonMoveBottom</tabstop>
   <tabstop>treeWidget</tabstop>
   <tabstop>sqlTextEdit</tabstop>
+  <tabstop>buttonAddConstraint</tabstop>
+  <tabstop>buttonRemoveConstraint</tabstop>
+  <tabstop>tableConstraints</tabstop>
  </tabstops>
  <resources>
   <include location="icons/icons.qrc"/>
@@ -481,8 +593,8 @@
    <slot>addField()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>94</x>
-     <y>253</y>
+     <x>82</x>
+     <y>248</y>
     </hint>
     <hint type="destinationlabel">
      <x>79</x>
@@ -497,8 +609,8 @@
    <slot>removeField()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>222</x>
-     <y>253</y>
+     <x>178</x>
+     <y>248</y>
     </hint>
     <hint type="destinationlabel">
      <x>249</x>
@@ -529,8 +641,8 @@
    <slot>moveUp()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>343</x>
-     <y>253</y>
+     <x>400</x>
+     <y>248</y>
     </hint>
     <hint type="destinationlabel">
      <x>308</x>
@@ -545,8 +657,8 @@
    <slot>moveDown()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>481</x>
-     <y>253</y>
+     <x>519</x>
+     <y>248</y>
     </hint>
     <hint type="destinationlabel">
      <x>308</x>
@@ -565,8 +677,8 @@
      <y>78</y>
     </hint>
     <hint type="destinationlabel">
-     <x>117</x>
-     <y>176</y>
+     <x>159</x>
+     <y>167</y>
     </hint>
    </hints>
   </connection>
@@ -577,8 +689,8 @@
    <slot>setWithoutRowid(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>344</x>
-     <y>143</y>
+     <x>640</x>
+     <y>156</y>
     </hint>
     <hint type="destinationlabel">
      <x>324</x>
@@ -609,12 +721,60 @@
    <slot>changeSchema(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>186</x>
-     <y>155</y>
+     <x>482</x>
+     <y>135</y>
     </hint>
     <hint type="destinationlabel">
      <x>647</x>
      <y>157</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonRemoveConstraint</sender>
+   <signal>clicked()</signal>
+   <receiver>EditTableDialog</receiver>
+   <slot>removeConstraint()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>119</x>
+     <y>253</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>647</x>
+     <y>157</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonMoveTop</sender>
+   <signal>clicked()</signal>
+   <receiver>EditTableDialog</receiver>
+   <slot>moveTop()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>207</x>
+     <y>240</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>202</x>
+     <y>190</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonMoveBottom</sender>
+   <signal>clicked()</signal>
+   <receiver>EditTableDialog</receiver>
+   <slot>moveBottom()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>530</x>
+     <y>246</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>400</x>
+     <y>186</y>
     </hint>
    </hints>
   </connection>
@@ -630,5 +790,8 @@
   <slot>moveDown()</slot>
   <slot>setWithoutRowid(bool)</slot>
   <slot>changeSchema(QString)</slot>
+  <slot>removeConstraint()</slot>
+  <slot>moveTop()</slot>
+  <slot>moveBottom()</slot>
  </slots>
 </ui>

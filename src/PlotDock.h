@@ -6,9 +6,12 @@
 #include <QDialog>
 #include <QVariant>
 
+#include <vector>
+
 class QMenu;
 class QPrinter;
 class QTreeWidgetItem;
+class QCPAxis;
 
 class SqliteTableModel;
 struct BrowseDataTableSettings;
@@ -81,8 +84,9 @@ private:
     {
         PlotColumnField = 0,
         PlotColumnX = 1,
-        PlotColumnY = 2,
-        PlotColumnType = 3,
+        PlotColumnY1 = 2,
+        PlotColumnY2 = 3,
+        PlotColumnType = 4,
     };
 
     Ui::PlotDock* ui;
@@ -93,6 +97,8 @@ private:
     bool m_showLegend;
     bool m_stackedBars;
     Palette m_graphPalette;
+    std::vector<QCPAxis *> yAxes;
+    std::vector<int> PlotColumnY;
 
     /*!
      * \brief guessdatatype try to parse the first 10 rows and decide the datatype
@@ -100,7 +106,7 @@ private:
      * \param column index of the column to check
      * \return the guessed datatype
      */
-    QVariant::Type guessDataType(SqliteTableModel* model, int column);
+    QVariant::Type guessDataType(SqliteTableModel* model, int column) const;
     void adjustBars();
 
 private slots:
